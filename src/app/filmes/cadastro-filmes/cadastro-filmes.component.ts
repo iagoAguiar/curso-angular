@@ -1,8 +1,12 @@
+import { AlertaComponent } from './../../shared/components/alerta/alerta.component';
+import { Alerta } from './../../shared/model/alerta';
 import { ValidarCamposService } from './../../shared/components/campos/validar-campos.service';
+import { MatDialog } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Filme } from 'src/app/shared/models/filme';
 import { FilmesService } from 'src/app/core/filmes.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'dio-cadastro-filmes',
@@ -14,7 +18,12 @@ export class CadastroFilmesComponent implements OnInit {
   cadastro: FormGroup;
   generos: Array<string>
 
-  constructor(private filmeService:FilmesService, public validacao: ValidarCamposService,  private fb: FormBuilder) { }
+  constructor(
+      private filmeService:FilmesService, 
+      public validacao: ValidarCamposService,  
+      public dialog: MatDialog,
+      private router: Router,
+      private fb: FormBuilder) { }
 
   get f() {
     return this.cadastro.controls;
@@ -53,13 +62,33 @@ export class CadastroFilmesComponent implements OnInit {
     this.filmeService.salvar(filme).subscribe(()=> {
       const config ={
         data: {
-          
-        }
+          btnSucesso: 'Ir para a listagem',
+          btnCancelar: 'Cadastrar um novo filme',
+          corBtnCancel: 'primary',
+          possuirBtnFechar: true
+        } as Alerta
       }
-      console.log("Sucesso")
+      const diagoloRef = this.dialog.open(AlertaComponent, config);
+      diagoloRef.afterClosed().subscribe(
+        (opcao: boolean) => {
+          if(opcao){
+            this.router.navigateByUrl('filmes');
+          } else {
+            this.reiniciarForm();
+          }
+        }
+      )
     },
     ()=>{
-      console.log("Erro ao salvar")
+      const config ={
+        data: {
+          titulo: 'Erro ao salvar o registro!',
+          descricao: 'não conseguimos salvar seu registro, favor conferir o formulários',
+          btnSucesso: 'Fechar',
+          corBtnSucesso: 'warn'
+        } as Alerta
+      }
+      this.dialog.open(AlertaComponent, config);
     } );
   }
 }

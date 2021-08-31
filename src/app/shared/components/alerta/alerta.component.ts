@@ -1,3 +1,4 @@
+import { Alerta } from './../../model/alerta';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -11,13 +12,13 @@ export class AlertaComponent implements OnInit {
 
   alerta = {
     titulo: 'Sucesso!',
-    descricao: 'Seu registro foi registrado com sucesso',
-    btnSuccess: 'OK',
-    btnCancel: 'Cancelar',
+    descricao: 'Seu registro foi cadastrado com sucesso',
+    btnSuccess: 'Ir para a listagem',
+    btnCancel: 'Cadastrar um novo filme',
     corBtnSuccess: 'primary',
     corBtnCancel:'warn',
     possuirBtnFechar: false
-  } ;
+  } as Alerta ;
 
   constructor(
     public dialogRef: MatDialogRef<AlertaComponent>,
