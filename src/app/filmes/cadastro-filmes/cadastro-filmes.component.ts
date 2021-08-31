@@ -51,6 +51,11 @@ export class CadastroFilmesComponent implements OnInit {
 
   private salvar(filme:Filme): void{
     this.filmeService.salvar(filme).subscribe(()=> {
+      const config ={
+        data: {
+          
+        }
+      }
       console.log("Sucesso")
     },
     ()=>{
